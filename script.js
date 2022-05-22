@@ -43,8 +43,8 @@ let change_text = function() {
 }
 
 let shorten_text = function(text) {
-    if(text.length > 33){
-        text = text.substring(0,15) + "..." + text.substring(text.length-15);
+    if(text.length > 32){
+        text = text.substring(0,15) + "..." + text.substring(text.length-14);
     }
     return text;
 }
