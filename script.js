@@ -11,7 +11,7 @@ let mouse_change_img = function (){
     document.querySelector(".editableText").innerText = curr_img['title'];
 }
 
-let up_key_change_img = function(event){
+let up_key_change_img = function(){
     console.log(event);
     if(curr_container.id != 1){
         let new_id = parseInt(curr_container.id) - 1;
@@ -24,7 +24,7 @@ let up_key_change_img = function(event){
     }
 }
 
-let down_key_change_img = function(event){
+let down_key_change_img = function(){
     if(curr_container.id != 5){
         let new_id = parseInt(curr_container.id) + 1;
         curr_container.classList.remove("blue");
@@ -39,14 +39,20 @@ let down_key_change_img = function(event){
 let change_text = function() {
     console.log(event);
     curr_img['title'] = this.innerText;
-    curr_container.querySelector(".caption").innerText = shorten_text(curr_img['title']);
+    shorten_text(curr_container.querySelector(".caption"), curr_img['title']);
 }
 
-let shorten_text = function(text) {
-    if(text.length > 32){
-        text = text.substring(0,15) + "..." + text.substring(text.length-14);
+let shorten_text = function(text_element, text) {
+    text_element.innerText = text;
+    console.log(text_element.scrollWidth);
+    console.log(text_element.clientWidth);
+    if(text_element.scrollWidth > text_element.clientWidth){
+        let left_len = ((text_element.clientWidth/text_element.scrollWidth) * text.length - 3)/2;
+        console.log(left_len);
+        text = text.substring(0, left_len) + "..." + text.substring(text.length - left_len + 2);
+        text_element.innerText = text;
+        console.log(left_len);
     }
-    return text;
 }
 
 let check_key = function() {
@@ -74,9 +80,12 @@ document.body.innerHTML = `
 `;
 let text_op = ``;
 for(let i=0; i<5; i++){
-    text_op += `<li class = "listElement" id="${i+1}"> <img align="middle" class="small_image" src = "${img_arr[i]['previewImage']}"> <span class = "caption">${shorten_text(img_arr[i]['title'])}</span></li>`;
+    text_op += `<li class = "listElement" id="${i+1}"> <img align="middle" class="small_image" src = "${img_arr[i]['previewImage']}"> <span class = "caption"></span></li>`;
 }
 document.querySelector(".leftList").innerHTML = text_op;
+for(let i=0; i<5; i++){
+    shorten_text(document.getElementById(`${i+1}`).querySelector('.caption'), img_arr[i]['title']);
+}
 let curr_container = document.getElementById('1');
 
 for(let i=0; i<5; i++){
